@@ -16,7 +16,7 @@ void SVC_Handler(void)
 
 	__asm("BX      LR \n");
 }
-
+/*comentario de prueba 1*/
 unsigned int * activate(unsigned int *stack)
 {
 	/* save kernel state */
