@@ -1,5 +1,7 @@
 #include "asm.h"
 
+/*DiNu: This is a test for Git*/
+
 void SVC_Handler( void ) __attribute__ (( naked ));
 
 void SVC_Handler(void)
