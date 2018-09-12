@@ -5,7 +5,7 @@
  * Generated linker script file for MK64FN1M0xxx12
  * Created from linkscript.ldt by FMCreateLinkLibraries
  * Using Freemarker v2.3.23
- * MCUXpresso IDE v10.1.1 [Build 606] [2018-01-02]  on Apr 25, 2018 4:32:49 PM
+ * MCUXpresso IDE v10.2.1 [Build 795] [2018-07-25]  on 9/09/2018 01:26:25 PM
  */
 
 INCLUDE "frdmk64f_demo_apps_hello_world_Debug_library.ld"
@@ -16,7 +16,7 @@ ENTRY(ResetISR)
 SECTIONS
 {
     /* MAIN TEXT SECTION */
-    .text : ALIGN(4)
+    .text : ALIGN(8)
     {
         FILL(0xff)
         __vectors_start__ = ABSOLUTE(.) ;
@@ -48,7 +48,6 @@ SECTIONS
 
         *(.after_vectors*)
 
-
         /* Kinetis Flash Configuration data */
         . = 0x400 ;
         PROVIDE(__FLASH_CONFIG_START__ = .) ;
@@ -57,26 +56,26 @@ SECTIONS
         ASSERT(!(__FLASH_CONFIG_START__ == __FLASH_CONFIG_END__), "Linker Flash Config Support Enabled, but no .FlashConfig section provided within application");
         /* End of Kinetis Flash Configuration data */
         
+    } > PROGRAM_FLASH
 
-    } >PROGRAM_FLASH
-
-    .text : ALIGN(4)
+    .text : ALIGN(8)
     {
-        *(.text*)
-        *(.rodata .rodata.* .constdata .constdata.*)
-        . = ALIGN(4);
+       *(.text*)
+       *(.rodata .rodata.* .constdata .constdata.*)
+       . = ALIGN(8);
     } > PROGRAM_FLASH
     /*
      * for exception handling/unwind - some Newlib functions (in common
      * with C++ and STDC++) use this. 
      */
-    .ARM.extab : ALIGN(4) 
+    .ARM.extab : ALIGN(8) 
     {
         *(.ARM.extab* .gnu.linkonce.armextab.*)
     } > PROGRAM_FLASH
+
     __exidx_start = .;
 
-    .ARM.exidx : ALIGN(4)
+    .ARM.exidx : ALIGN(8)
     {
         *(.ARM.exidx* .gnu.linkonce.armexidx.*)
     } > PROGRAM_FLASH
@@ -91,7 +90,8 @@ SECTIONS
         *(m_usb_bdt)
     } > SRAM_UPPER
     /* DATA section for SRAM_LOWER */
-    .data_RAM2 : ALIGN(4)
+
+    .data_RAM2 : ALIGN(8)
     {
         FILL(0xff)
         PROVIDE(__start_data_RAM2 = .) ;
@@ -99,12 +99,12 @@ SECTIONS
         *(.ramfunc.$SRAM_LOWER)
         *(.data.$RAM2*)
         *(.data.$SRAM_LOWER*)
-        . = ALIGN(4) ;
+        . = ALIGN(8) ;
         PROVIDE(__end_data_RAM2 = .) ;
      } > SRAM_LOWER AT>PROGRAM_FLASH
-
     /* DATA section for FLEX_RAM */
-    .data_RAM3 : ALIGN(4)
+
+    .data_RAM3 : ALIGN(8)
     {
         FILL(0xff)
         PROVIDE(__start_data_RAM3 = .) ;
@@ -112,86 +112,92 @@ SECTIONS
         *(.ramfunc.$FLEX_RAM)
         *(.data.$RAM3*)
         *(.data.$FLEX_RAM*)
-        . = ALIGN(4) ;
+        . = ALIGN(8) ;
         PROVIDE(__end_data_RAM3 = .) ;
      } > FLEX_RAM AT>PROGRAM_FLASH
-
     /* MAIN DATA SECTION */
-    .uninit_RESERVED : ALIGN(4)
+    .uninit_RESERVED : ALIGN(8)
     {
         KEEP(*(.bss.$RESERVED*))
         . = ALIGN(4) ;
         _end_uninit_RESERVED = .;
     } > SRAM_UPPER
+
     /* Main DATA section (SRAM_UPPER) */
-    .data : ALIGN(4)
+    .data : ALIGN(8)
     {
        FILL(0xff)
        _data = . ;
        *(vtable)
        *(.ramfunc*)
        *(.data*)
-       . = ALIGN(4) ;
+       . = ALIGN(8) ;
        _edata = . ;
     } > SRAM_UPPER AT>PROGRAM_FLASH
+
     /* BSS section for SRAM_LOWER */
-    .bss_RAM2 : ALIGN(4)
+    .bss_RAM2 : ALIGN(8)
     {
        PROVIDE(__start_bss_RAM2 = .) ;
        *(.bss.$RAM2*)
        *(.bss.$SRAM_LOWER*)
-       . = ALIGN (. != 0 ? 4 : 1) ; /* avoid empty segment */
+       . = ALIGN (. != 0 ? 8 : 1) ; /* avoid empty segment */
        PROVIDE(__end_bss_RAM2 = .) ;
     } > SRAM_LOWER 
+
     /* BSS section for FLEX_RAM */
-    .bss_RAM3 : ALIGN(4)
+    .bss_RAM3 : ALIGN(8)
     {
        PROVIDE(__start_bss_RAM3 = .) ;
        *(.bss.$RAM3*)
        *(.bss.$FLEX_RAM*)
-       . = ALIGN (. != 0 ? 4 : 1) ; /* avoid empty segment */
+       . = ALIGN (. != 0 ? 8 : 1) ; /* avoid empty segment */
        PROVIDE(__end_bss_RAM3 = .) ;
     } > FLEX_RAM 
+
     /* MAIN BSS SECTION */
-    .bss : ALIGN(4)
+    .bss : ALIGN(8)
     {
         _bss = .;
         *(.bss*)
         *(COMMON)
-        . = ALIGN(4) ;
+        . = ALIGN(8) ;
         _ebss = .;
         PROVIDE(end = .);
     } > SRAM_UPPER
+
     /* NOINIT section for SRAM_LOWER */
-    .noinit_RAM2 (NOLOAD) : ALIGN(4)
+    .noinit_RAM2 (NOLOAD) : ALIGN(8)
     {
        *(.noinit.$RAM2*)
        *(.noinit.$SRAM_LOWER*)
-       . = ALIGN(4) ;
+       . = ALIGN(8) ;
     } > SRAM_LOWER 
+
     /* NOINIT section for FLEX_RAM */
-    .noinit_RAM3 (NOLOAD) : ALIGN(4)
+    .noinit_RAM3 (NOLOAD) : ALIGN(8)
     {
        *(.noinit.$RAM3*)
        *(.noinit.$FLEX_RAM*)
-       . = ALIGN(4) ;
+       . = ALIGN(8) ;
     } > FLEX_RAM 
+
     /* DEFAULT NOINIT SECTION */
-    .noinit (NOLOAD): ALIGN(4)
+    .noinit (NOLOAD): ALIGN(8)
     {
         _noinit = .;
         *(.noinit*) 
-         . = ALIGN(4) ;
+         . = ALIGN(8) ;
         _end_noinit = .;
     } > SRAM_UPPER
 
     /* Reserve and place Heap within memory map */
     _HeapSize = 0x1000;
-    .heap :  ALIGN(4)
+    .heap :  ALIGN(8)
     {
         _pvHeapStart = .;
         . += _HeapSize;
-        . = ALIGN(4);
+        . = ALIGN(8);
         _pvHeapLimit = .;
     } > SRAM_UPPER
 
@@ -202,10 +208,10 @@ SECTIONS
         . += _StackSize;
     } > SRAM_UPPER
     /* Locate actual Stack in memory map */
-    .stack ORIGIN(SRAM_UPPER) + LENGTH(SRAM_UPPER) - _StackSize - 0:  ALIGN(4)
+    .stack ORIGIN(SRAM_UPPER) + LENGTH(SRAM_UPPER) - _StackSize - 0:  ALIGN(8)
     {
         _vStackBase = .;
-        . = ALIGN(4);
+        . = ALIGN(8);
         _vStackTop = . + _StackSize;
     } > SRAM_UPPER
 

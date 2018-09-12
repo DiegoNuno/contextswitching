@@ -49,7 +49,6 @@ post-build:
 	-arm-none-eabi-size "frdmk64f_demo_apps_ContextSwitch-2.axf"; # arm-none-eabi-objcopy -v -O binary "frdmk64f_demo_apps_ContextSwitch-2.axf" "frdmk64f_demo_apps_ContextSwitch-2.bin" ; # checksum -p MK64FN1M0xxx12 -d "frdmk64f_demo_apps_ContextSwitch-2.bin";
 	-@echo ' '
 
-.PHONY: all clean dependents
-.SECONDARY: post-build
+.PHONY: all clean dependents post-build
 
 -include ../makefile.targets
