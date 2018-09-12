@@ -1,7 +1,8 @@
 #ifndef __ASM_H_
 #define __ASM_H_
 
-/*Merge conflic too*/
+/*Merge conflict in git 0*/
+
 unsigned int * activate(unsigned int *stack);
 void syscall(void);
 
