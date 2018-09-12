@@ -1,5 +1,5 @@
 #include "asm.h"
-
+/*System call function*/
 void syscall(void)
 {
 	__asm ("NOP \n");
