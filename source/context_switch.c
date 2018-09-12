@@ -42,3 +42,5 @@ unsigned int * activate(unsigned int *stack)
 
 	return 0;
 }
+
+/*Fin de archivo*/*/
